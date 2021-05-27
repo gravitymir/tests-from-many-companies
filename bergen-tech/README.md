@@ -1,5 +1,6 @@
 ![Berger logo svg](./images/berger.svg)
 
+
 # Отклик на вакансию Golang Developer (Junior)
 [Вакансия на hh.ru Golang Developer (Junior)](https://hh.ru/vacancy/44393368?query=Golang%20junior)
 
