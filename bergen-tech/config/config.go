@@ -12,10 +12,11 @@ import (
 )
 
 type Config struct {
-	HTTPAddr         string `envconfig:"HTTP_ADDR"`
+	HTTPHost         string `envconfig:"HTTP_HOST"`
+	HTTPPort         string `envconfig:"HTTP_PORT"`
+	LogLevel         uint   `envconfig:"LOG_LEVEL"`
 	PgURL            string `envconfig:"PG_URL"`
 	PgMigrationsPath string `envconfig:"PG_MIGRATIONS_PATH"`
-	LogLevel         uint   `envconfig:"LOG_LEVEL"`
 }
 
 var (
@@ -23,33 +24,32 @@ var (
 	once   sync.Once
 )
 
-//Get init once Config, return always *Config
+//Get init Config, return *Config
 func Get() *Config {
-
 	once.Do(func() {
-
+		//set envinment variables from file ".env"
 		if err := godotenv.Load(); err != nil {
 			log.Fatal("Error loading .env file")
 		}
 
+		//catch envinment variables to "&config"
 		if err := envconfig.Process("", &config); err != nil {
 			log.Fatal(err)
 		}
 
-		configBytes, err := json.MarshalIndent(config, "", "  ")
+		//catch flag loglevel or default from ".env"
+		loglevel := flag.Uint("loglevel", config.LogLevel, "for logrus levels")
+
+		flag.Parse() //parse flag
+
+		config.LogLevel = *loglevel //override config.LogLevel
+
+		configJsonBytes, err := json.MarshalIndent(config, "", "  ")
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		//catch flag loglevel
-		loglevel := flag.Uint("loglevel", config.LogLevel, "for logrus levels")
-
-		flag.Parse()
-
-		config.LogLevel = *loglevel
-
-		fmt.Println("Configuration:", string(configBytes))
+		fmt.Printf("Configuration: %v\n", string(configJsonBytes))
 	})
-
 	return &config
 }

@@ -1,0 +1,9 @@
+FROM postgres:latest
+
+#RUN ["mkdir", "-p", "/var/lib/postgresql/data"]
+#RUN ["chmod", "-R", "777", "/var/lib/postresql/data"]
+ENTRYPOINT docker-entrypoint.sh
+#CMD ["./cmd/job/bergen-tech"]
+#CMD ["mkdir", "-p", "/var/lib/postgresql/data"]
+CMD ["chmod", "-R", "777", "/var/lib/postresql/data"]
+

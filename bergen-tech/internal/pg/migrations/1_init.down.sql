@@ -1,0 +1,3 @@
+DROP TABLE labor;
+DROP TABLE task;
+DROP TABLE job;

@@ -3,44 +3,38 @@ version: '3.8'
 services:
 
   postgres:
-    restart: always
+    restart: "no" #"no" always on-failure unless-stopped
     image: postgres:latest
+    container_name: postgres
     ports:
-      - 5433:5432
+      - 7432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=callback
+      - POSTGRES_DB=bergen-tech
     volumes:
-      - ./internal/pg/data:/var/lib/postgresql/data
+      - ./internal/pg/data:/var/lib/postgresql
 
-  callback:
+      # BUG - ./internal/pg/data:/var/lib/postgresql/data #BUG chmod on #folder ./internal/pg/data from conteiner, next run ERROR access!
+    # command: ["chmod", "-R", "777", "/var/lib/postresql/data"]
+      
+
+  bergen-tech:
     depends_on:
       - postgres
     build:
       context: ./
-      dockerfile: Dockerfile.callback
-    container_name: callback
+      dockerfile: Dockerfile.bergen-tech
+    container_name: bergen-tech
     ports:
-     - "9090:9090"
+    - 127.0.0.1:9090:9090/tcp
     environment:
-      HTTP_ADDR: ":9090"
-      PG_URL: "postgres://postgres:postgres@postgres/callback?sslmode=disable"
+      GOPATH: /
+      HTTP_PORT: :9090
+      HTTP_HOST: 127.0.0.1
+      LOG_LEVEL: 6
+      PG_URL: "postgres://postgres:postgres@postgres/bergen-tech?sslmode=disable"
       PG_MIGRATIONS_PATH: "file://../../internal/pg/migrations"
 
-    command: ["./wait-for-it.sh", "postgres:5432", "--timeout=60", "--", "./callback"]
-
-
-  tester:
-    depends_on:
-      - postgres
-      - callback
-    build:
-      context: ./
-      dockerfile: Dockerfile.tester
-    container_name: tester
-    ports:
-      - "9010:9010"
-    environment:
-      HTTP_ADDR: ":9010"
-    command: ["./wait-for-it.sh", "callback:9090", "--timeout=60", "--", "./tester"]
+    command: ["./cmd/job/wait-for-it.sh", "postgres:7432", "--timeout=10", "--", "./bergen-tech", "-loglevel=6"]
+    #command: ["./bergen-tech", "-loglevel=6"]

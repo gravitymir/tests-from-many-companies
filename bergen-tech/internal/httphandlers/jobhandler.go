@@ -41,3 +41,13 @@ func Task() http.HandlerFunc {
 		fmt.Println("Method: " + r.Method + " " + convertMethod(r.Method) + " Task")
 	})
 }
+
+//Labor is HTTPHandler for Labor
+func Labor() http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mtx.Lock()
+		defer mtx.Unlock()
+		fmt.Fprintf(w, "Method: "+r.Method+"\n"+convertMethod(r.Method)+" Task")
+		fmt.Println("Method: " + r.Method + " " + convertMethod(r.Method) + " Task")
+	})
+}
