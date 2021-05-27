@@ -1,4 +1,3 @@
-<img >
 ![Berger logo svg](./images/berger.svg)
 
 
