@@ -43,10 +43,16 @@ func run() error {
 	}()
 
 	sig := make(chan os.Signal, 1)
-	signal.Notify(sig, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	signal.Notify(sig,
+		os.Interrupt,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		syscall.SIGQUIT)
 	<-sig
 
-	fmt.Println("closing")
+	fmt.Println("Closing")
 
 	return nil
 }
