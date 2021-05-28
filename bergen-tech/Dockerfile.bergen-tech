@@ -3,7 +3,6 @@ ENV GOPATH=/
 ENV HTTP_PORT=:9090
 ENV HTTP_HOST=127.0.0.1
 ENV LOG_LEVEL=6
-COPY ./ ./
+COPY . .
 RUN ["go", "build", "-o", "./cmd/job/bergen-tech", "-v", "./cmd/job"]
 CMD ["./cmd/job/bergen-tech"]
-

@@ -5,7 +5,7 @@ services:
   postgres:
     restart: "no" #"no" always on-failure unless-stopped
     image: postgres:latest
-    container_name: postgres
+    container_name: postgres-db
     ports:
       - 127.0.0.1:7432:5432/tcp
     environment:
@@ -13,9 +13,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=bergen-tech
     volumes:
-      - ./internal/pg/data:/var/lib/postgresql
-      # BUG - ./internal/pg/data:/var/lib/postgresql/data #BUG chmod on #folder ./internal/pg/data from conteiner, next run ERROR access!
-      
+      - ./internal/pg/data:/var/lib/postgresql      
 
   bergen-tech:
     depends_on:
