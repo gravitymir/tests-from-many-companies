@@ -25,5 +25,8 @@
 ∙ Код должен быть покрыт комментариями.
 ∙ ЖЕЛАТЕЛЬНО чтобы приложение компилировалось и запускалось в контейнере.
 
+### Database structure
+![Database structure](./images/database_struct.png)
+
 
 

@@ -38,7 +38,7 @@ func run() error {
 
 	log.Info("Bergen-tech server is running on http://" + config.Get().HTTPHost + config.Get().HTTPPort + "/")
 
-	go func() {
+	go func() { //Run HTTP Server
 		log.Warn(http.ListenAndServe(config.Get().HTTPPort, nil))
 	}()
 
